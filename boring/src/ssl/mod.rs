@@ -1993,6 +1993,28 @@ impl SslContextBuilder {
         unsafe { cvt_0i(ffi::SSL_CTX_set_compliance_policy(self.as_ptr(), policy.0)).map(|_| ()) }
     }
 
+    /// Sets whether a certificate compression algorithm should be used.
+    ///
+    /// This corresponds to [`SSL_CTX_add_cert_compression_alg`]
+    ///
+    /// [`SSL_CTX_add_cert_compression_alg`]: https://commondatastorage.googleapis.com/chromium-boringssl-docs/ssl.h.html#SSL_CTX_add_cert_compression_alg
+    pub fn add_cert_compression_alg(
+        &mut self,
+        alg_id: u16,
+        compress: ffi::ssl_cert_compression_func_t,
+        decompress: ffi::ssl_cert_decompression_func_t,
+    ) -> Result<(), ErrorStack> {
+        unsafe {
+            cvt_0i(ffi::SSL_CTX_add_cert_compression_alg(
+                self.as_ptr(),
+                alg_id,
+                compress,
+                decompress,
+            ))
+            .map(|_| ())
+        }
+    }
+
     /// Consumes the builder, returning a new `SslContext`.
     pub fn build(self) -> SslContext {
         self.ctx
